@@ -1,7 +1,7 @@
 {
   "name": "links",
   "version": "0.1.0",
-  "homepage": "https://cripp.github.io/links",
+  "homepage": "https://viciouskinid.github.io/links",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
