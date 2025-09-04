@@ -1,0 +1,278 @@
+[
+  {
+    "name": "Google",
+    "url": "https://www.google.com",
+    "description": "Search engine and web services"
+  },
+  {
+    "name": "YouTube",
+    "url": "https://www.youtube.com",
+    "description": "Video sharing platform"
+  },
+  {
+    "name": "GitHub",
+    "url": "https://github.com",
+    "description": "Code hosting and collaboration platform"
+  },
+  {
+    "name": "Development",
+    "description": "Programming and development tools",
+    "folder": [
+      {
+        "name": "Stack Overflow",
+        "url": "https://stackoverflow.com",
+        "description": "Programming Q&A community"
+      },
+      {
+        "name": "MDN Web Docs",
+        "url": "https://developer.mozilla.org",
+        "description": "Web development documentation"
+      },
+      {
+        "name": "React",
+        "url": "https://reactjs.org",
+        "description": "JavaScript library for building UIs"
+      },
+      {
+        "name": "VS Code",
+        "url": "https://code.visualstudio.com",
+        "description": "Source code editor"
+      },
+      {
+        "name": "CodePen",
+        "url": "https://codepen.io",
+        "description": "Online code editor and playground"
+      },
+      {
+        "name": "JSFiddle",
+        "url": "https://jsfiddle.net",
+        "description": "Online JavaScript testing"
+      },
+      {
+        "name": "Replit",
+        "url": "https://replit.com",
+        "description": "Online IDE and hosting"
+      },
+      {
+        "name": "NPM",
+        "url": "https://www.npmjs.com",
+        "description": "Node.js package manager"
+      },
+      {
+        "name": "Yarn",
+        "url": "https://yarnpkg.com",
+        "description": "Package manager for JavaScript"
+      },
+      {
+        "name": "GitLab",
+        "url": "https://gitlab.com",
+        "description": "DevOps platform and Git repos"
+      }
+    ]
+  },
+  {
+    "name": "Netflix",
+    "url": "https://www.netflix.com",
+    "description": "Streaming entertainment service"
+  },
+  {
+    "name": "Social Media",
+    "description": "Social networking platforms",
+    "folder": [
+      {
+        "name": "Twitter",
+        "url": "https://twitter.com",
+        "description": "Social media and microblogging"
+      },
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com",
+        "description": "Professional networking platform"
+      },
+      {
+        "name": "Facebook",
+        "url": "https://www.facebook.com",
+        "description": "Social networking platform"
+      },
+      {
+        "name": "Instagram",
+        "url": "https://www.instagram.com",
+        "description": "Photo and video sharing"
+      },
+      {
+        "name": "Reddit",
+        "url": "https://www.reddit.com",
+        "description": "Social news aggregation"
+      },
+      {
+        "name": "Discord",
+        "url": "https://discord.com",
+        "description": "Voice and text chat platform"
+      },
+      {
+        "name": "Twitch",
+        "url": "https://www.twitch.tv",
+        "description": "Live streaming platform"
+      },
+      {
+        "name": "Pinterest",
+        "url": "https://www.pinterest.com",
+        "description": "Visual discovery and ideas"
+      },
+      {
+        "name": "TikTok",
+        "url": "https://www.tiktok.com",
+        "description": "Short-form video platform"
+      }
+    ]
+  },
+  {
+    "name": "Gmail",
+    "url": "https://mail.google.com",
+    "description": "Email service by Google"
+  },
+  {
+    "name": "Productivity",
+    "description": "Work and productivity tools",
+    "folder": [
+      {
+        "name": "Slack",
+        "url": "https://slack.com",
+        "description": "Team collaboration and messaging"
+      },
+      {
+        "name": "Zoom",
+        "url": "https://zoom.us",
+        "description": "Video conferencing platform"
+      },
+      {
+        "name": "Dropbox",
+        "url": "https://www.dropbox.com",
+        "description": "Cloud storage and file sharing"
+      },
+      {
+        "name": "Trello",
+        "url": "https://trello.com",
+        "description": "Project management tool"
+      },
+      {
+        "name": "Notion",
+        "url": "https://www.notion.so",
+        "description": "All-in-one workspace"
+      },
+      {
+        "name": "Outlook",
+        "url": "https://outlook.live.com",
+        "description": "Email and calendar service"
+      }
+    ]
+  },
+  {
+    "name": "Amazon",
+    "url": "https://www.amazon.com",
+    "description": "Online shopping and cloud services"
+  },
+  {
+    "name": "Design",
+    "description": "Design and creative tools",
+    "folder": [
+      {
+        "name": "Figma",
+        "url": "https://www.figma.com",
+        "description": "Design and prototyping tool"
+      },
+      {
+        "name": "Canva",
+        "url": "https://www.canva.com",
+        "description": "Graphic design platform"
+      },
+      {
+        "name": "Adobe Creative Cloud",
+        "url": "https://www.adobe.com",
+        "description": "Creative software suite"
+      },
+      {
+        "name": "Unsplash",
+        "url": "https://unsplash.com",
+        "description": "Free high-quality photos"
+      },
+      {
+        "name": "Pexels",
+        "url": "https://www.pexels.com",
+        "description": "Free stock photos and videos"
+      }
+    ]
+  },
+  {
+    "name": "Cloud & DevOps",
+    "description": "Cloud services and deployment platforms",
+    "folder": [
+      {
+        "name": "Vercel",
+        "url": "https://vercel.com",
+        "description": "Frontend deployment platform"
+      },
+      {
+        "name": "Netlify",
+        "url": "https://www.netlify.com",
+        "description": "Web development platform"
+      },
+      {
+        "name": "Heroku",
+        "url": "https://www.heroku.com",
+        "description": "Cloud application platform"
+      },
+      {
+        "name": "AWS",
+        "url": "https://aws.amazon.com",
+        "description": "Amazon Web Services cloud"
+      },
+      {
+        "name": "Google Cloud",
+        "url": "https://cloud.google.com",
+        "description": "Google's cloud platform"
+      },
+      {
+        "name": "Microsoft Azure",
+        "url": "https://azure.microsoft.com",
+        "description": "Microsoft's cloud services"
+      },
+      {
+        "name": "DigitalOcean",
+        "url": "https://www.digitalocean.com",
+        "description": "Cloud infrastructure provider"
+      },
+      {
+        "name": "Docker",
+        "url": "https://www.docker.com",
+        "description": "Containerization platform"
+      },
+      {
+        "name": "Kubernetes",
+        "url": "https://kubernetes.io",
+        "description": "Container orchestration"
+      },
+      {
+        "name": "Jenkins",
+        "url": "https://www.jenkins.io",
+        "description": "Automation server for CI/CD"
+      }
+    ]
+  },
+  {
+    "name": "Communication",
+    "description": "Messaging and communication apps",
+    "folder": [
+      {
+        "name": "WhatsApp",
+        "url": "https://web.whatsapp.com",
+        "description": "Messaging and calling service"
+      },
+      {
+        "name": "Telegram",
+        "url": "https://web.telegram.org",
+        "description": "Cloud-based messaging app"
+      }
+    ]
+  }
+]
