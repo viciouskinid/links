@@ -8,42 +8,29 @@ const LinksList = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', url: '', description: '' });
   const [showUploadForm, setShowUploadForm] = useState(false);
-  const [lastSaved, setLastSaved] = useState(null);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Load links from localStorage on component mount
   useEffect(() => {
     const savedLinks = localStorage.getItem('linksData');
-    console.log('Loading from localStorage:', savedLinks ? 'found data' : 'no data');
-    if (savedLinks && savedLinks !== 'undefined') {
+    if (savedLinks) {
       try {
         const parsedLinks = JSON.parse(savedLinks);
-        console.log('Parsed links:', parsedLinks.length, 'items');
-        if (Array.isArray(parsedLinks)) {
-          setLinks(parsedLinks);
-        } else {
-          console.log('Invalid data format in localStorage, clearing...');
-          setLinks([]);
-        }
+        setLinks(parsedLinks);
       } catch (error) {
         console.error('Error parsing saved links:', error);
         setLinks([]);
       }
     } else {
-      console.log('No valid data in localStorage, starting with empty array');
       setLinks([]);
     }
-    setIsInitialLoad(false);
   }, []);
 
-  // Save links to localStorage whenever links change (but not on initial load)
+  // Save links to localStorage whenever links change
   useEffect(() => {
-    if (!isInitialLoad) {
-      console.log('Saving links to localStorage:', links.length, 'items');
+    if (links.length > 0 || localStorage.getItem('linksData')) {
       localStorage.setItem('linksData', JSON.stringify(links));
-      setLastSaved(new Date());
     }
-  }, [links, isInitialLoad]);
+  }, [links]);
 
   // Parse URL path for folder navigation
   useEffect(() => {
@@ -107,10 +94,7 @@ const LinksList = () => {
         try {
           const uploadedData = JSON.parse(e.target.result);
           if (Array.isArray(uploadedData)) {
-            console.log('Importing data:', uploadedData.length, 'items');
             setLinks(uploadedData);
-            // Explicitly save to localStorage to ensure it persists
-            localStorage.setItem('linksData', JSON.stringify(uploadedData));
             setShowUploadForm(false);
             alert('Links imported successfully!');
           } else {
@@ -228,215 +212,87 @@ const LinksList = () => {
     return (
       <div style={{
         display: 'grid',
-        gridTemplateRows: 'repeat(auto-fit, 60px)',
-        gridAutoFlow: 'column',
-        gap: '2px',
-        padding: '10px 20px',
-        height: 'calc(100vh - 120px)',
-        overflow: 'auto',
-        gridAutoColumns: '1fr'
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+        gap: '20px',
+        padding: '20px'
       }}>
-        {items.map((item, index) => {
-          const isFolder = item.folder !== undefined;
-          
-          if (isFolder) {
-            // Render folder
-            return (
-              <div
-                key={index}
-                onClick={() => handleFolderClick(item)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '6px 12px',
-                  backgroundColor: '#e8e8e8',
-                  border: '1px solid #d0d0d0',
-                  cursor: 'pointer',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
-                  transition: 'all 0.2s ease',
-                  height: '60px',
-                  overflow: 'hidden'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#d0d0d0';
-                  e.target.style.borderColor = '#007acc';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = '#e8e8e8';
-                  e.target.style.borderColor = '#d0d0d0';
-                }}
-              >
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  marginRight: '12px',
-                  flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '16px'
-                }}>
-                  📁
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-                  <span style={{
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                    lineHeight: '1.2',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}>
-                    {item.name} ({item.folder.length})
-                  </span>
-                  <span style={{
-                    fontSize: '11px',
-                    fontWeight: '400',
-                    color: '#666666',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                    lineHeight: '1.2',
-                    marginTop: '2px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}>
-                    {item.description}
-                  </span>
-                </div>
-              </div>
-            );
-          } else {
-            // Render link
-            return (
+        {items.map((item, index) => (
+          <div
+            key={index}
+            style={{
+              border: '1px solid #ddd',
+              borderRadius: '8px',
+              padding: '20px',
+              backgroundColor: '#fff',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              cursor: item.folder ? 'pointer' : 'default',
+              transition: 'all 0.2s ease'
+            }}
+            onClick={item.folder ? () => handleFolderClick(item) : undefined}
+            onMouseOver={item.folder ? (e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
+            } : undefined}
+            onMouseOut={item.folder ? (e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            } : undefined}
+          >
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: '12px'
+            }}>
+              <span style={{
+                fontSize: '24px',
+                marginRight: '12px'
+              }}>
+                {item.folder ? '📁' : '🔗'}
+              </span>
+              <h3 style={{
+                margin: 0,
+                fontSize: '18px',
+                fontWeight: '600',
+                color: item.folder ? '#2563eb' : '#1f2937'
+              }}>
+                {item.name}
+              </h3>
+            </div>
+            <p style={{
+              margin: '0 0 15px 0',
+              color: '#6b7280',
+              fontSize: '14px',
+              lineHeight: '1.4'
+            }}>
+              {item.description}
+            </p>
+            {item.url && (
               <a
-                key={index}
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '6px 12px',
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e1e5e9',
+                  color: '#2563eb',
                   textDecoration: 'none',
-                  color: '#333333',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
-                  transition: 'all 0.2s ease',
-                  height: '60px',
-                  overflow: 'hidden'
+                  fontSize: '14px',
+                  fontWeight: '500'
                 }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#f8f9fa';
-                  e.target.style.borderColor = '#007acc';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = '#ffffff';
-                  e.target.style.borderColor = '#e1e5e9';
-                }}
+                onClick={(e) => e.stopPropagation()}
               >
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  marginRight: '12px',
-                  flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '16px'
-                }}>
-                  🔗
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-                  <span style={{
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                    lineHeight: '1.2',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}>
-                    {item.name}
-                  </span>
-                  <span style={{
-                    fontSize: '11px',
-                    fontWeight: '400',
-                    color: '#666666',
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                    lineHeight: '1.2',
-                    marginTop: '2px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}>
-                    {item.description}
-                  </span>
-                </div>
+                Visit Site →
               </a>
-            );
-          }
-        })}
-
-        {/* Add New Item Cell */}
-        <div
-          onClick={handleAddNew}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: '6px 12px',
-            backgroundColor: '#f0f8ff',
-            border: '2px dashed #007acc',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            height: '60px',
-            overflow: 'hidden'
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = '#e6f3ff';
-            e.target.style.borderColor = '#0056b3';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = '#f0f8ff';
-            e.target.style.borderColor = '#007acc';
-          }}
-        >
-          <div style={{
-            width: '20px',
-            height: '20px',
-            marginRight: '12px',
-            flexShrink: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '18px',
-            color: '#007acc'
-          }}>
-            +
+            )}
+            {item.folder && (
+              <div style={{
+                color: '#6b7280',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}>
+                {item.folder.length} item{item.folder.length !== 1 ? 's' : ''}
+              </div>
+            )}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-            <span style={{
-              fontSize: '13px',
-              fontWeight: '600',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-              lineHeight: '1.2',
-              color: '#007acc'
-            }}>
-              Add New
-            </span>
-            <span style={{
-              fontSize: '11px',
-              fontWeight: '400',
-              color: '#0056b3',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-              lineHeight: '1.2',
-              marginTop: '2px'
-            }}>
-              Create link or folder
-            </span>
-          </div>
-        </div>
+        ))}
       </div>
     );
   };
@@ -445,13 +301,13 @@ const LinksList = () => {
     <div style={{
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       minHeight: '100vh',
-      backgroundColor: '#ffffff'
+      backgroundColor: '#f8fafc'
     }}>
       {/* Header */}
       <header style={{
         backgroundColor: '#fff',
         borderBottom: '1px solid #e5e7eb',
-        padding: '12px 0',
+        padding: '15px 0',
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -465,21 +321,21 @@ const LinksList = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '12px'
+          gap: '15px'
         }}>
           {/* Left side - Navigation */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             <h1 
               onClick={handleHomeClick}
               style={{
                 margin: 0,
-                fontSize: '20px',
+                fontSize: '24px',
                 fontWeight: '700',
                 color: '#1f2937',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px'
+                gap: '8px'
               }}
             >
               🔗 Links
@@ -487,13 +343,12 @@ const LinksList = () => {
             
             {/* Breadcrumb */}
             {breadcrumb.length > 0 && (
-              <nav style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ color: '#6b7280', fontSize: '14px' }}>→</span>
+              <nav style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#6b7280' }}>→</span>
                 {breadcrumb.map((crumb, index) => (
                   <span key={index} style={{
-                    color: '#3b82f6',
-                    fontWeight: '500',
-                    fontSize: '14px'
+                    color: '#2563eb',
+                    fontWeight: '500'
                   }}>
                     {crumb.name}
                   </span>
@@ -503,53 +358,41 @@ const LinksList = () => {
           </div>
 
           {/* Right side - Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             {links.length > 0 && (
               <>
                 <button
                   onClick={handleDownloadData}
                   style={{
-                    padding: '6px 12px',
+                    padding: '8px 16px',
                     backgroundColor: '#10b981',
                     color: 'white',
                     border: 'none',
                     borderRadius: '6px',
-                    fontSize: '13px',
+                    fontSize: '14px',
                     fontWeight: '500',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px'
+                    gap: '6px'
                   }}
                 >
                   💾 Export
                 </button>
-                {lastSaved && (
-                  <span style={{
-                    fontSize: '12px',
-                    color: '#10b981',
-                    fontWeight: '500',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}>
-                    ✓ Saved {lastSaved.toLocaleTimeString()}
-                  </span>
-                )}
                 <button
                   onClick={handleClearData}
                   style={{
-                    padding: '6px 12px',
+                    padding: '8px 16px',
                     backgroundColor: '#ef4444',
                     color: 'white',
                     border: 'none',
                     borderRadius: '6px',
-                    fontSize: '13px',
+                    fontSize: '14px',
                     fontWeight: '500',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px'
+                    gap: '6px'
                   }}
                 >
                   🗑️ Clear
@@ -560,17 +403,17 @@ const LinksList = () => {
             <button
               onClick={() => setShowUploadForm(true)}
               style={{
-                padding: '6px 12px',
+                padding: '8px 16px',
                 backgroundColor: '#3b82f6',
                 color: 'white',
                 border: 'none',
                 borderRadius: '6px',
-                fontSize: '13px',
+                fontSize: '14px',
                 fontWeight: '500',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px'
+                gap: '6px'
               }}
             >
               📂 Import
@@ -579,17 +422,17 @@ const LinksList = () => {
             <button
               onClick={handleAddNew}
               style={{
-                padding: '6px 12px',
+                padding: '8px 16px',
                 backgroundColor: '#2563eb',
                 color: 'white',
                 border: 'none',
                 borderRadius: '6px',
-                fontSize: '13px',
+                fontSize: '14px',
                 fontWeight: '500',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px'
+                gap: '6px'
               }}
             >
               ➕ Add New
@@ -599,17 +442,17 @@ const LinksList = () => {
               <button
                 onClick={handleBackClick}
                 style={{
-                  padding: '6px 12px',
+                  padding: '8px 16px',
                   backgroundColor: '#6b7280',
                   color: 'white',
                   border: 'none',
                   borderRadius: '6px',
-                  fontSize: '13px',
+                  fontSize: '14px',
                   fontWeight: '500',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '4px'
+                  gap: '6px'
                 }}
               >
                 ← Back
