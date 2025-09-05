@@ -48,7 +48,10 @@ const LinksList = () => {
   // Parse URL path for folder navigation
   useEffect(() => {
     const path = window.location.pathname;
-    const pathSegments = path.split('/').filter(segment => segment);
+    // Remove the base path for GitHub Pages (/links)
+    const basePath = process.env.NODE_ENV === 'production' ? '/links' : '';
+    const relativePath = path.startsWith(basePath) ? path.slice(basePath.length) : path;
+    const pathSegments = relativePath.split('/').filter(segment => segment);
     
     if (pathSegments.length === 0) {
       setCurrentView('main');
@@ -62,7 +65,9 @@ const LinksList = () => {
         setCurrentFolder(folder);
         setBreadcrumb([{ name: folderName, folder: folder }]);
       } else {
-        window.history.pushState({}, '', '/');
+        // Redirect to the correct base path
+        const redirectPath = process.env.NODE_ENV === 'production' ? '/links/' : '/';
+        window.history.pushState({}, '', redirectPath);
         setCurrentView('main');
         setCurrentFolder(null);
         setBreadcrumb([]);
@@ -72,7 +77,8 @@ const LinksList = () => {
 
   const handleFolderClick = (folder) => {
     const encodedName = encodeURIComponent(folder.name);
-    window.history.pushState({}, '', `/${encodedName}`);
+    const basePath = process.env.NODE_ENV === 'production' ? '/links' : '';
+    window.history.pushState({}, '', `${basePath}/${encodedName}`);
     setCurrentView('folder');
     setCurrentFolder(folder);
     setBreadcrumb([{ name: folder.name, folder: folder }]);
@@ -80,7 +86,8 @@ const LinksList = () => {
   };
 
   const handleBackClick = () => {
-    window.history.pushState({}, '', '/');
+    const basePath = process.env.NODE_ENV === 'production' ? '/links/' : '/';
+    window.history.pushState({}, '', basePath);
     setCurrentView('main');
     setCurrentFolder(null);
     setBreadcrumb([]);
@@ -343,10 +350,26 @@ const LinksList = () => {
                   flexShrink: 0,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '16px'
+                  justifyContent: 'center'
                 }}>
-                  🔗
+                  <img
+                    src={`https://www.google.com/s2/favicons?sz=64&domain=${new URL(item.url).hostname}`}
+                    alt="Site icon"
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      borderRadius: '2px'
+                    }}
+                    onError={(e) => {
+                      // Fallback to chain icon if favicon fails to load
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                  <span style={{
+                    display: 'none',
+                    fontSize: '16px'
+                  }}>🔗</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
                   <span style={{
